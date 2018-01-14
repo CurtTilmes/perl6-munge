@@ -79,9 +79,32 @@ class X::Munge::Error is Exception
     method message() { munge_strerror($!code) }
 }
 
+class X::Munge::Unknown is X::Munge::Error
+{
+    has $.thing;
+    has $.value;
+    method message { "Unknown $!thing: $!value" }
+}
+
+class X::Munge::UnknownCipher is X::Munge::Unknown
+{
+    method new($cipher) { nextwith(thing => 'cipher', value => $cipher) }
+}
+
+class X::Munge::UnknownMAC is X::Munge::Unknown
+{
+    method new($mac) { nextwith(thing => 'MAC', value => $mac) }
+}
+
+class X::Munge::UnknownZip is X::Munge::Unknown
+{
+    method new($zip) { nextwith(thing => 'Zip', value => $zip) }
+}
+
 sub munge-check($code) is export
 {
-    die X::Munge::Error.new(code => Munge::Error($code)) if $code;
+    die X::Munge::Error.new(code => Munge::Error($code))
+        unless $code == EMUNGE_SUCCESS;
 }
 
 class Munge::Context is repr('CPointer')
@@ -131,8 +154,8 @@ class Munge::Context is repr('CPointer')
 
     multi method cipher(Str $cipher)
     {
-        samewith Munge::Cipher::{"MUNGE_CIPHER_$cipher"}
-                // die "Unknown Cipher $cipher";
+        samewith Munge::Cipher::{"MUNGE_CIPHER_$cipher.uc()"}
+                 // die X::Munge::UnknownCipher.new($cipher)
     }
 
     multi method MAC(Munge::MAC $mac?)
@@ -148,7 +171,8 @@ class Munge::Context is repr('CPointer')
 
     multi method MAC(Str $mac)
     {
-        samewith Munge::MAC::{"MUNGE_MAC_$mac"} // die "Unknown MAC $mac";
+        samewith Munge::MAC::{"MUNGE_MAC_$mac.uc()"}
+                 // die X::Munge::UnknownMAC.new($mac)
     }
 
     multi method zip(Munge::Zip $zip?)
@@ -164,7 +188,8 @@ class Munge::Context is repr('CPointer')
 
     multi method zip(Str $zip)
     {
-        samewith Munge::Zip::{"MUNGE_ZIP_$zip"} // die "Unknown ZIP $zip";
+        samewith Munge::Zip::{"MUNGE_ZIP_$zip.uc()"}
+                 // die X::Munge::UnknownZip.new($zip)
     }
 
     method ttl(Int $seconds?)

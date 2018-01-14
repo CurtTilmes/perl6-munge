@@ -3,7 +3,7 @@ use Test::When <extended>;
 
 use Munge;
 
-plan 3;
+plan 4;
 
 subtest 'Defaults',
 {
@@ -72,6 +72,29 @@ subtest 'Set by string',
     is $m.uid-restriction, 123, 'uid restriction set';
 
     is $m.gid-restriction, 456, 'gid restriction set';
+}
+
+subtest 'Errors',
+{
+    plan 6;
+
+    throws-like { Munge.new(cipher => 'bad') }, X::Munge::Error,
+        'Cipher generic error';
+
+    throws-like { Munge.new(cipher => 'bad') }, X::Munge::UnknownCipher,
+        'Cipher UnknownCipher error';
+
+    throws-like { Munge.new(MAC => 'bad') }, X::Munge::Error,
+        'Cipher generic error';
+
+    throws-like { Munge.new(MAC => 'bad') }, X::Munge::UnknownMAC,
+        'Cipher UnknownMAC error';
+
+    throws-like { Munge.new(zip => 'bad') }, X::Munge::Error,
+        'Cipher generic error';
+
+    throws-like { Munge.new(zip => 'bad') }, X::Munge::UnknownZip,
+        'Cipher UnknownZip error';
 }
 
 done-testing;

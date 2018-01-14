@@ -29,6 +29,25 @@ BEGIN for <
     MUNGE_UID_ANY
     MUNGE_GID_ANY
 
+    EMUNGE_SUCCESS
+    EMUNGE_SNAFU
+    EMUNGE_BAD_ARG
+    EMUNGE_BAD_LENGTH
+    EMUNGE_OVERFLOW
+    EMUNGE_NO_MEMORY
+    EMUNGE_SOCKET
+    EMUNGE_TIMEOUT
+    EMUNGE_BAD_CRED
+    EMUNGE_BAD_VERSION
+    EMUNGE_BAD_CIPHER
+    EMUNGE_BAD_MAC
+    EMUNGE_BAD_ZIP
+    EMUNGE_BAD_REALM
+    EMUNGE_CRED_INVALID
+    EMUNGE_CRED_EXPIRED
+    EMUNGE_CRED_REWOUND
+    EMUNGE_CRED_REPLAYED
+    EMUNGE_CRED_UNAUTHORIZED
 > { EXPORT::DEFAULT::{$_} = ::($_) }
 
 class Munge
@@ -169,5 +188,13 @@ Validates the specified credential, optionally returning the
 encapsulated payload as a decoded string.
 
 Throws an exception for any error, including invalid credentials.
+
+=head1 EXCEPTIONS
+
+Base exception is X::Munge::Error.
+
+$exception.code will return a Munge::Error enumeration value `EMUNGE_*`
+
++$exception.code will give you the traditional libmunge error code.
 
 =end pod

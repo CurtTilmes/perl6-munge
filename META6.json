@@ -1,7 +1,7 @@
 {
     "name" : "Munge",
 
-    "description" : "Perl6 bindings for Munge",
+    "description" : "MUNGE Uid 'N' Gid Emporium Authentication Service",
 
     "version" : "0.1",
 

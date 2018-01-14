@@ -2,8 +2,6 @@ use NativeCall;
 
 constant LIBMUNGE = ('munge', v2);
 
-sub free(Pointer) is native {}
-
 enum Munge::Opt <
     MUNGE_OPT_CIPHER_TYPE
     MUNGE_OPT_MAC_TYPE
@@ -241,6 +239,8 @@ class Munge
     sub munge_decode(Str, Munge::Context, Pointer is rw, int32 is rw,
                      int32 is rw, int32 is rw --> int32) is native(LIBMUNGE) {}
 
+    sub free(Pointer) is native {}
+
     submethod TWEAK(:$cipher, :$MAC, :$zip, :$ttl, :$socket,
                     :$uid-restriction, :$gid-restriction)
     {
@@ -306,3 +306,35 @@ class Munge
 
     method decode(Str $cred) { $.decode-buf($cred).decode }
 }
+
+=begin pod
+
+=head1 NAME
+
+Munge -- MUNGE Uid 'N' Gid Emporium Authentication Service
+
+=head1 SYNOPSIS
+
+  use Munge;
+
+  my $m = Munge.new;
+
+  my $encoded = $m.encode('this');
+
+  say $m.decode($encoded);
+
+=head1 DESCRIPTION
+
+From the main Munge site: L<https://github.com/dun/munge/wiki>
+
+MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for
+creating and validating credentials. It is designed to be highly
+scalable for use in an HPC cluster environment. It allows a process to
+authenticate the UID and GID of another local or remote process within
+a group of hosts having common users and groups. These hosts form a
+security realm that is defined by a shared cryptographic key. Clients
+within this security realm can create and validate credentials without
+the use of root privileges, reserved ports, or platform-specific
+methods.
+
+=end pod

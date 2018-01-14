@@ -1,3 +1,5 @@
+#!/usr/bin/env perl6
+
 use Munge;
 
 my $m = Munge.new;

@@ -1,5 +1,4 @@
 use Test;
-use POSIX;
 use Test::When <extended>;
 
 use Munge;
@@ -11,16 +10,14 @@ ok my $m = Munge.new(cipher => 'blowfish', MAC => 'sha256', zip => 'zlib'),
 
 ok my $encoded = $m.encode('foo'), 'encode';
 
-say $encoded;
-
 is $m.decode($encoded), 'foo', 'decode';
 
 is $m.cipher, MUNGE_CIPHER_BLOWFISH, 'Cipher';
 
 is $m.MAC, MUNGE_MAC_SHA256, 'MAC';
 
-is $m.uid, getuid, 'uid';
+is $m.uid, +$*USER, 'uid';
 
-is $m.gid, getgid, 'gid';
+is $m.gid, +$*GROUP, 'gid';
 
 done-testing;

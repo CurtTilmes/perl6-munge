@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title></title>
+  <meta charset="UTF-8" />
+  <style>
+    /* code gets the browser-default font
+     * kbd gets a slightly less common monospace font
+     * samp gets the hard pixelly fonts
+     */
+    kbd { font-family: "Droid Sans Mono", "Luxi Mono", "Inconsolata", monospace }
+    samp { font-family: "Terminus", "Courier", "Lucida Console", monospace }
+    /* WHATWG HTML frowns on the use of <u> because it looks like a link,
+     * so we make it not look like one.
+     */
+    u { text-decoration: none }
+    .nested {
+        margin-left: 3em;
+    }
+    // footnote things:
+    aside, u { opacity: 0.7 }
+    a[id^="fn-"]:target { background: #ff0 }
+  </style>
+  <link rel="stylesheet" href="//design.perl6.org/perl.css">
+  
+  
+</head>
+<body class="pod">
+<div id="___top"></div>
+
+
+<nav class="indexgroup">
+<table id="TOC">
+<caption><h2 id="TOC_Title">Table of Contents</h2></caption>
+<tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#NAME">NAME</a></td></tr>
+  <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#SYNOPSIS">SYNOPSIS</a></td></tr>
+  <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#DESCRIPTION">DESCRIPTION</a></td></tr>
+    <tr class="toc-level-1"><td class="toc-number">4</td><td class="toc-text"><a href="#METHODS">METHODS</a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">4.1</td><td class="toc-text"><a href="#new(--&gt;_Munge::Context)"> new (--> Munge::Context )</a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.2</td><td class="toc-text"><a href="#clone(--&gt;_Munge::Context)"> clone (--> Munge::Context )</a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.3</td><td class="toc-text"><a href="#error(--&gt;_Str)"> error (--> Str)</a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.4</td><td class="toc-text"><a href="#cipher(Munge::Cipher_$cipher?)"> cipher (Munge::Cipher $cipher?)</a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">4.5</td><td class="toc-text"><a href="#cipher(Str_$cipher)"> cipher (Str $cipher)</a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">4.6</td><td class="toc-text"><a href="#MAC(Munge::MAC_$mac?)"> MAC (Munge::MAC $mac?)</a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">4.7</td><td class="toc-text"><a href="#MAC(Str_$mac)"> MAC (Str $mac)</a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">4.8</td><td class="toc-text"><a href="#zip(Munge::Zip_$zip?)"> zip (Munge::Zip $zip?)</a></td></tr>
+ <tr class="toc-level-2"><td class="toc-number">4.9</td><td class="toc-text"><a href="#zip(Str_$zip)"> zip (Str $zip)</a></td></tr>
+    <tr class="toc-level-2"><td class="toc-number">4.10</td><td class="toc-text"><a href="#ttl(Int_$seconds?)"> ttl (Int $seconds?)</a></td></tr>
+   <tr class="toc-level-2"><td class="toc-number">4.11</td><td class="toc-text"><a href="#addr4(--&gt;_Str)"> addr4 (--> Str)</a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.12</td><td class="toc-text"><a href="#encode-time(--&gt;_DateTime)"> encode-time (--> DateTime)</a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.13</td><td class="toc-text"><a href="#decode-time(--&gt;_DateTime)"> decode-time (--> DateTime)</a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.14</td><td class="toc-text"><a href="#socket(Str_$local-domain-socket?)"> socket (Str $local-domain-socket?)</a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.15</td><td class="toc-text"><a href="#uid-restriction(Int_$uid?)"> uid-restriction (Int $uid?)</a></td></tr>
+  <tr class="toc-level-2"><td class="toc-number">4.16</td><td class="toc-text"><a href="#gid-restriction(Int_$gid?)"> gid-restriction (Int $gid?)</a></td></tr>
+ 
+</table>
+</nav>
+
+<div class="pod-body
+
+">
+<h1 id="NAME"><a class="u" href="#___top" title="go to top of document">NAME</a></h1>
+<p>Munge::Context -- Context for MUNGE</p>
+<h1 id="SYNOPSIS"><a class="u" href="#___top" title="go to top of document">SYNOPSIS</a></h1>
+<pre class="pod-block-code">use Munge::Context;
+
+my $ctx = Munge::Context.new;
+
+say $ctx.cipher;
+
+$ctx.cipher(MUNGE_CIPHER_BLOWFISH);
+# or
+$ctx.cipher(&#39;BLOWFISH&#39;);
+
+say $ctx.MAC;
+
+$ctx.MAC(MUNGE_MAC_SHA1);
+# or
+$ctx.MAC(&#39;SHA1&#39;);
+
+say $ctx.zip;
+
+$ctx.zip(MUNGE_ZIP_BZLIB);
+# or
+$ctx.zip(&#39;BZLIB&#39;);
+
+$ctx.ttl(300); # seconds
+$ctx.ttl(MUNGE_TTL_MAXIMUM);
+
+
+say $ctx.addr4; # dotted quad IP address
+
+say $ctx.encode-time; # DateTime
+say $ctx.decode-time;
+
+say $ctx.socket; # /path/to/socket
+$ctx.socket(&#39;/path/to/socket&#39;);
+
+$ctx.uid-restriction(MUNGE_UID_ANY); # or specific uid
+$ctx.gid-restriction(MUNGE_GID_ANY); # or specific gid</pre>
+<h1 id="DESCRIPTION"><a class="u" href="#___top" title="go to top of document">DESCRIPTION</a></h1>
+<p>A Context for <code>Munge</code>;</p>
+<h1 id="METHODS"><a class="u" href="#___top" title="go to top of document">METHODS</a></h1>
+<h2 id="new(-->_Munge::Context)"><a class="u" href="#___top" title="go to top of document"><strong>new</strong>(--&gt; <strong>Munge::Context</strong>)</a></h2>
+<p>Create a new context.</p>
+<h2 id="clone(-->_Munge::Context)"><a class="u" href="#___top" title="go to top of document"><strong>clone</strong>(--&gt; <strong>Munge::Context</strong>)</a></h2>
+<p>Copy a context.</p>
+<h2 id="error(-->_Str)"><a class="u" href="#___top" title="go to top of document"><strong>error</strong>(--&gt; Str)</a></h2>
+<p>Returns a descriptive text string describing the MUNGE error number according to the context.</p>
+<h2 id="cipher(Munge::Cipher_$cipher?)"><a class="u" href="#___top" title="go to top of document"><strong>cipher</strong>(Munge::Cipher $cipher?)</a></h2>
+<h2 id="cipher(Str_$cipher)"><a class="u" href="#___top" title="go to top of document"><strong>cipher</strong>(Str $cipher)</a></h2>
+<p>Optionally set the context cipher to: MUNGE_CIPHER_NONE, MUNGE_CIPHER_DEFAULT, MUNGE_CIPHER_BLOWFISH, MUNGE_CIPHER_CAST5, MUNGE_CIPHER_AES128, MUNGE_CIPHER_AES256</p>
+<p>Ciphers can also be specified by string without MUNGE_CIPHER.</p>
+<p>Returns a Munge::Cipher enumeration one of above.</p>
+<h2 id="MAC(Munge::MAC_$mac?)"><a class="u" href="#___top" title="go to top of document"><strong>MAC</strong>(Munge::MAC $mac?)</a></h2>
+<h2 id="MAC(Str_$mac)"><a class="u" href="#___top" title="go to top of document"><strong>MAC</strong>(Str $mac)</a></h2>
+<p>Optionally set the context message authentication code (MAC) to: MUNGE_MAC_DEFAULT MUNGE_MAC_MD5 MUNGE_MAC_SHA1 MUNGE_MAC_RIPEMD160 MUNGE_MAC_SHA256 MUNGE_MAC_SHA512</p>
+<p>MAC can also be specified by string without MUNGE_MAC.</p>
+<p>Returns a Munge::MAC enumeration one of above.</p>
+<h2 id="zip(Munge::Zip_$zip?)"><a class="u" href="#___top" title="go to top of document"><strong>zip</strong>(Munge::Zip $zip?)</a></h2>
+<h2 id="zip(Str_$zip)"><a class="u" href="#___top" title="go to top of document"><strong>zip</strong>(Str $zip)</a></h2>
+<p>Optionally set the context compression type to: MUNGE_ZIP_NONE MUNGE_ZIP_DEFAULT MUNGE_ZIP_BZLIB MUNGE_ZIP_ZLIB</p>
+<p>Zip can also be specified by string without MUNGE_ZIP.</p>
+<p>Returns a Munge::Zip enumeration one of above.</p>
+<h2 id="ttl(Int_$seconds?)"><a class="u" href="#___top" title="go to top of document"><strong>ttl</strong>(Int $seconds?)</a></h2>
+<p>Optionally set Time-To-Live number of seconds after the encode-time that the credential is considered valid. Can also specify MUNGE_TTL_DEFAULT (0) or MUNGE_TTL_MAXIMUM (-1).</p>
+<p>Returns the current value.</p>
+<h2 id="addr4(-->_Str)"><a class="u" href="#___top" title="go to top of document"><strong>addr4</strong>(--&gt; Str)</a></h2>
+<p>Returns the dotted quad for the IPv4 address of the host where the credential was encoded.</p>
+<h2 id="encode-time(-->_DateTime)"><a class="u" href="#___top" title="go to top of document"><strong>encode-time</strong>(--&gt; DateTime)</a></h2>
+<p>Returns the time at which the credential was encoded.</p>
+<h2 id="decode-time(-->_DateTime)"><a class="u" href="#___top" title="go to top of document"><strong>decode-time</strong>(--&gt; DateTime)</a></h2>
+<p>Returns the time at which the credential was decoded.</p>
+<h2 id="socket(Str_$local-domain-socket?)"><a class="u" href="#___top" title="go to top of document"><strong>socket</strong>(Str $local-domain-socket?)</a></h2>
+<p>Get and optionally set the local domain socket for connecting with munged.</p>
+<h2 id="uid-restriction(Int_$uid?)"><a class="u" href="#___top" title="go to top of document"><strong>uid-restriction</strong>(Int $uid?)</a></h2>
+<p>Get and optionally set the UID allowed to decode the credential. Defaults to MUNGE_UID_ANY (-1).</p>
+<h2 id="gid-restriction(Int_$gid?)"><a class="u" href="#___top" title="go to top of document"><strong>gid-restriction</strong>(Int $gid?)</a></h2>
+<p>Get and optionally set the GID allowed to decode the credential. Defaults to MUNGE_GID_ANY (-1).</p>
+
+</div>
+
+
+</body>
+</html>
+

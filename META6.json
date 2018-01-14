@@ -12,7 +12,8 @@
     "tags" : [ "NATIVECALL", "AUTHENTICATION" ],
 
     "provides" : {
-        "Munge" : "lib/Munge.pm6"
+        "Munge"          : "lib/Munge.pm6",
+        "Munge::Context" : "lib/Munge/Context.pm6"
     },
 
     "depends" : [ "NativeCall" ],

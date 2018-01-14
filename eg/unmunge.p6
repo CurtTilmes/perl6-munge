@@ -14,7 +14,7 @@ sub MAIN()
 
     if $!
     {
-        if $!.code ~~ /BAD_CRED/
+        if $!.code ~~ EMUNGE_BAD_CRED
         {
             say "Error: Failed to match armor prefix";
             exit $!.code;
